@@ -1,0 +1,6 @@
+name: BlockShuffle
+version: '1.0'
+author: zlataovce
+main: me.zlataovce.blockshuffle.Main
+description: A BlockShuffle minigame plugin.
+api-version: 1.13
