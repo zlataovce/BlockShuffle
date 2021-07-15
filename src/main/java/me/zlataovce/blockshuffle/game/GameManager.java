@@ -39,7 +39,9 @@ public class GameManager {
     }
 
     public void terminateAllGames(boolean force) {
-        new ArrayList<>(this.runningGames.keySet()).forEach(game -> this.terminateGame(game, force));
+        if (this.runningGames.size() > 0) {
+            new ArrayList<>(this.runningGames.keySet()).forEach(game -> this.terminateGame(game, force));
+        }
     }
 
     public void newGame(Arena arena, ArrayList<Player> partPlayers) {

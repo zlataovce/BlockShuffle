@@ -19,15 +19,6 @@ public class BlockShufflePartyCommand extends BaseCommand {
     @Dependency
     private Main plugin;
 
-    @PreCommand
-    public boolean onPreCommand(CommandSender sender, String[] args) {
-        if (sender instanceof ConsoleCommandSender) {
-            sender.sendMessage("In-game only!");
-            return false;
-        }
-        return true;
-    }
-
     @Subcommand("create")
     @Description("Creates a party.")
     @Syntax("<arena>")
@@ -114,7 +105,6 @@ public class BlockShufflePartyCommand extends BaseCommand {
 
     @HelpCommand
     public void onHelp(CommandSender sender, CommandHelp help) {
-        sender.sendMessage("&aBlockShuffle Party Help");
         help.showHelp();
     }
 }

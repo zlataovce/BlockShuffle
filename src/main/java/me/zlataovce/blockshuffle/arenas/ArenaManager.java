@@ -8,6 +8,7 @@ import org.spongepowered.configurate.ConfigurateException;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.UUID;
@@ -24,7 +25,13 @@ public class ArenaManager {
     public ArenaManager(Main plugin) {
         this.plugin = plugin;
         try {
+            Path arenasPath = Paths.get(plugin.getDataFolder().toPath().toString(), "arenas");
+            if (!arenasPath.toFile().exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                arenasPath.toFile().mkdirs();
+            }
             this.arenas = ArenaConfig.loadArenas(Paths.get(plugin.getDataFolder().toPath().toString(), "arenas"));
+            this.arenas.values().forEach(arena -> this.alternativeNaming.put(arena.getName(), arena.getUuid()));
         } catch (IOException e) {
             Bukkit.getLogger().log(Level.SEVERE, "Could not load arenas!");
             e.printStackTrace();

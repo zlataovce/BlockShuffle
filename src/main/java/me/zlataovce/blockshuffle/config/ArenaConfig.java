@@ -12,7 +12,6 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -42,13 +41,9 @@ public class ArenaConfig {
             if (arenaName == null || arenaNode.node("uuid").getString() == null) {
                 return null;
             }
-            final UUID arenaUUID = UUID.fromString(Objects.requireNonNull(arenaNode.node("world").getString()));
+            final UUID arenaUUID = UUID.fromString(Objects.requireNonNull(arenaNode.node("uuid").getString()));
             final int arenaRounds = arenaNode.node("rounds").getInt();
             if (arenaRounds < 1) {
-                return null;
-            }
-            final int arenaMaxPlayers = arenaNode.node("maxPlayers").getInt();
-            if (arenaMaxPlayers < 2) {
                 return null;
             }
             final int arenaMaxInstances = arenaNode.node("maxInstances").getInt();
@@ -94,14 +89,19 @@ public class ArenaConfig {
     public static HashMap<UUID, Arena> loadArenas(Path dataFolder) throws IOException {
         HashMap<UUID, Arena> arenas = new HashMap<>();
 
-        Files.walk(dataFolder).forEach(path -> {
+        if (!dataFolder.toFile().exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dataFolder.toFile().mkdirs();
+        }
+        for (File arenaFile : Objects.requireNonNull(dataFolder.toFile().listFiles())) {
+            Path path = arenaFile.toPath();
             Arena arena = loadArena(path);
             if (arena == null) {
                 Bukkit.getLogger().log(Level.WARNING, "Arena " + path.toFile().getName() + " has broken configuration or a serialization error occurred, skipping.");
-                return;
+                continue;
             }
             arenas.put(arena.getUuid(), arena);
-        });
+        }
         return arenas;
     }
 

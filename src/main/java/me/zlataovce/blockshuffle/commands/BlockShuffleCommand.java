@@ -92,7 +92,6 @@ public class BlockShuffleCommand extends BaseCommand {
 
     @HelpCommand
     public void onHelp(CommandSender sender, CommandHelp help) {
-        sender.sendMessage("&aBlockShuffle Help");
         help.showHelp();
     }
 }
